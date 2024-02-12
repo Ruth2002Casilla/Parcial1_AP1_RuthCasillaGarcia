@@ -5,7 +5,7 @@ namespace Parcial1_AP1_RuthCasillaGarcia.Models
     public class Metas
     {
         [Key]
-        public int MetasId { get; set; }
+        public int MetaId { get; set; }
 
         [Required(ErrorMessage ="Este campo es Obligatorio")]
         [DataType(DataType.Date)]
