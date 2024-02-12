@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/wwwroot/bootstrap/scss/utilities/CUIDADO/todo.cs
