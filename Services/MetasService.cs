@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Parcial1_AP1_RuthCasillaGarcia.DAL;
 using Parcial1_AP1_RuthCasillaGarcia.Models;
 using System.Linq.Expressions;
