@@ -1,0 +1,119 @@
+﻿@page "/CreateMetas"
+
+@inject MetasService metasService;
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager;
+
+<EditForm Model="Meta" OnValidSubmit="Guardar">
+  <DataAnnotationsValidator />
+
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white d-flex justify-content-center align-items-center">
+            <h3 class="mb-0"> <i class="fas fa-clipboard-list"></i> Registro de Metas</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label for="AporteId" class="form-label">ID Meta:</label>
+                    <div class="input-group">
+                        <div style="width: 90%; height: 2em;">
+                            <InputNumber @bind-Value="Meta.MetaId" class="form-control" style="font-size: 0.8em;" aria-describedby="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="Fecha" class="form-label">Fecha:</label>
+                    <div class="input-group">
+                        <div style="width: 46em; height: 2.5em;">
+                            <InputDate @bind-Value="Meta.Fecha" class="form-control" style="font-size: 0.8em;" />
+                            <ValidationMessage For="@(() => Meta.Fecha)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripci&oacuten:</label>
+                <InputText @bind-Value="Meta.Descripcion" class="form-control" style="width: 60em; height: 2.5em" />
+                <ValidationMessage For="@(() => Meta.Descripcion)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Monto" class="form-label">Monto:</label>
+                <InputNumber @bind-Value="Meta.Monto" class="form-control" style="width: 30em; height: 3em" />
+                <ValidationMessage For="@(() => Meta.Monto)" />
+            </div>
+
+        </div>
+
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                <a type="button" href="/MetasIndex/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+ @code {
+
+    public Metas Meta = new Metas();
+    private bool descripcionExistente = false;
+
+    public void Nuevo()
+    {
+        Meta = new Metas();
+        descripcionExistente = false;
+    }
+
+    public async Task Buscar()
+    {
+        descripcionExistente = false;
+        var descripcionEncontrada = await metasService.Buscar(Meta.MetaId);
+
+        if (descripcionEncontrada != null)
+        {
+            Meta = descripcionEncontrada;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public bool Verificar()
+    {
+        descripcionExistente = metasService.Listar(m => m.Descripcion.ToLower() == Meta.Descripcion.ToLower()
+        && m.MetaId != Meta.MetaId).Result.Any();
+
+        return descripcionExistente;
+    }
+
+    public async Task Guardar()
+    {
+        if (Verificar())
+        {
+            return;
+        }
+        var guardo = await metasService.Guardar(Meta);
+        if (guardo)
+        {
+            Nuevo();
+            Console.WriteLine(Meta);
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        if (await metasService.Verificar(Meta.MetaId) && await metasService.Eliminar(Meta))
+        {
+            Nuevo();
+        }
+        else { return; }
+    }
+
+}

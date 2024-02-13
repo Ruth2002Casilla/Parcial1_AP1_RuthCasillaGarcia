@@ -1,0 +1,90 @@
+﻿@page "/EditMetas/{MetaId:int}"
+
+@inject MetasService metasService;
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<EditForm Model="Meta" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+
+        <div class="card-header bg-primary text-white text-center py-2 rounded">
+            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Editar Metas</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label for="Fecha" class="form-label">Fecha:</label>
+                    <div class="input-group">
+                        <div style="width: 46em; height: 2.5em;">
+                            <InputDate @bind-Value="Meta.Fecha" class="form-control" style="font-size: 0.8em;" />
+                            <ValidationMessage For="@(() => Meta.Fecha)" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="Descripcion" class="form-label">Descripci&oacuten:</label>
+                    <InputText @bind-Value="Meta.Descripcion" class="form-control" placeholder="Ingrese la Descripción" />
+                    <ValidationMessage For="@(() => Meta.Descripcion)" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="Monto" class="form-label">Monto:</label>
+                    <InputNumber @bind-Value="Meta.Monto" class="form-control" placeholder="Ingrese el Monto" />
+                    <ValidationMessage For="@(() => Meta.Monto)" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer bg-light d-flex justify-content-end">
+            <div class="btn-group">
+                <a type="button" href="/MetasIndex/" class="btn btn-outline-danger"><span class="fas fa-arrow-left"></span> Retroceder </a>
+                <button type="submit" class="btn btn-outline-success"><span class="fas fa-save"></span> Guardar </button>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+
+@code {
+
+    public Metas Meta = new Metas();
+
+    [Parameter]
+    public int MetaId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (MetaId > 0)
+        {
+          Meta.MetaId = MetaId;
+          await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        var existe = await metasService.Buscar(Meta.MetaId);
+       if (existe != null)
+       {
+            Meta = existe;
+       }
+    }
+
+    public async Task Guardar()
+    {
+      var guardo = await metasService.Guardar(Meta);
+      if (guardo)
+      {
+         NavigationManager.NavigateTo("/MetasIndex");
+      }
+    }
+
+}

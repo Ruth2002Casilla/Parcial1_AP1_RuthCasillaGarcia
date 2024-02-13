@@ -1,0 +1,107 @@
+﻿@page "/MetasIndex"
+
+@inject MetasService metasService;
+@rendermode InteractiveServer
+
+ <EditForm Model="ListaMetas" class="border shadow-lg p-3 rounded">
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Aportes</h3>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="monto">Monto</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="fas fa-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/CreateMetas" class="btn btn-success" type="button"><span class="fas fa-plus"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>ID</th>
+                <th>Descripci&oacuten</th>
+                <th>Monto</th>
+                <th>Editar</th>
+                <th>Detalle</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meta in ListaMetas)
+            {
+                <tr>
+                    <td>@meta.MetaId</td>
+                    <td>@meta.Descripcion</td>
+                    <td>@meta.Monto</td>
+                    <td>
+                        <a href="/EditMetas/@meta.MetaId" style="border: none; background-color: transparent;" class="btn-editar">
+                            <span class="bi bi-marker-tip" style="font-size: 2rem;"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/DetailsMetas/@meta.MetaId" style="border: none; background-color: transparent;" class="btn-detalle">
+                            <span class="bi bi-info-circle-fill" style="font-size: 2rem;"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/DeleteMetas/@meta.MetaId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                            <span class="bi bi-dash-circle-fill" style="font-size: 2rem;"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+
+
+@code {
+
+    public Metas Meta = new Metas();
+
+    public List<Metas> ListaMetas = new List<Metas>();
+
+    private string filtro = "id";
+    private string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaMetas = await metasService.Listar(a => true);
+    }
+
+    private async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int MetaId))
+            {
+                ListaMetas = await metasService.Listar(m => m.MetaId == MetaId);
+            }
+            else if (filtro == "monto" && decimal.TryParse(valorFiltro, out decimal Monto))
+            {
+                ListaMetas = await metasService.Listar(m => m.Monto == Monto);
+            }
+        }
+        else
+        {
+            ListaMetas = await metasService.Listar(a => true);
+        }
+    }
+}
+ 
+

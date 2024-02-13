@@ -1,0 +1,83 @@
+﻿@page "/DeleteMetas/{MetaId:int}";
+
+@inject MetasService metasService;
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="Meta">
+   <DataAnnotationsValidator />
+
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white text-center py-2 rounded">
+            <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Eliminar Metas</h3>
+        </div>
+
+        <div class="card-body text-center">
+            <div class="col-md-6 mb-3 mx-auto">
+                <label style="font-weight: bold;" class="form-label font-weight-bold">Fecha:</label>
+                <span>@Meta.Fecha</span>
+            </div>
+
+            <div class="col-md-6 mb-3 mx-auto">
+                <label style="font-weight: bold;" class="form-label font-weight-bold">Descripci&oacuten:</label>
+                <span>@Meta.Descripcion</span>
+            </div>
+
+
+            <div class="col-md-6 mb-3 mx-auto">
+                <label style="font-weight: bold;" class="form-label font-weight-bold">Monto:</label>
+                <span>@Meta.Monto</span>
+            </div>
+
+            <div class="col-md-12 mb-3 mx-auto">
+                <p style="font-weight: bold;">¿Seguro que deseas eliminar esta Meta?</p>
+            </div>
+
+        </div>
+
+        <div class="card-footer bg-light d-flex justify-content-center">
+            <div class="btn-group">
+                <button @onclick="Eliminar" type="button" class="btn btn-success btn-block"><span class="fas fa-check"></span> Sí</button>
+                <a href="/MetasIndex/" class="btn btn-danger btn-block"><span class="fas fa-times"></span> No</a>
+            </div>
+        </div>
+
+    </div>
+
+</EditForm>
+
+@code {
+
+    public Metas Meta = new Metas();
+
+   [Parameter]
+   public int MetaId { get; set; }
+
+   protected override async Task OnInitializedAsync()
+   {
+        if (MetaId > 0)
+        {
+            Meta.MetaId = MetaId;
+            await Buscar();
+        }
+   }
+
+   public async Task Buscar()
+   {
+     var existe = await metasService.Buscar(Meta.MetaId);
+     if (existe != null)
+     {
+        Meta = existe;
+     }
+   }
+
+   public async Task Eliminar()
+   {
+     var elimino = await metasService.Eliminar(Meta);
+     if (elimino)
+     {
+        NavigationManager.NavigateTo("/MetasIndex");
+     }
+   }
+
+}
