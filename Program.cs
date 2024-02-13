@@ -1,10 +1,21 @@
+using Microsoft.EntityFrameworkCore;
 using Parcial1_AP1_RuthCasillaGarcia.Components;
+using Parcial1_AP1_RuthCasillaGarcia.DAL;
+using Parcial1_AP1_RuthCasillaGarcia.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var conexion = builder.Configuration.GetConnectionString("conexion");
+builder.Services.AddDbContext<Context>(options =>
+options.UseSqlite(conexion));
+
+builder.Services.AddScoped<MetasService>();
+
+
 
 var app = builder.Build();
 
