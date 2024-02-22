@@ -44,10 +44,9 @@
                 }
             </div>
 
-            <div class="mb-3">
-                <label for="Monto" class="form-label">Monto:</label>
-                <InputNumber @bind-Value="Meta.Monto" class="form-control" style="width: 30em; height: 3em" />
-                <ValidationMessage For="@(() => Meta.Monto)" />
+            <div class="col-md-7 mb-3">
+                <label style="font-weight: bold; display: inline-block; margin-left: 170px;">Monto:</label>
+                <span>@Meta.Monto.ToString("N2")</span>
             </div>
 
         </div>
