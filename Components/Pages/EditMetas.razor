@@ -28,9 +28,14 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label for="Descripcion" class="form-label">Descripci&oacuten:</label>
+                    <label for="Descripcion" class="form-label">Descripción:</label>
                     <InputText @bind-Value="Meta.Descripcion" class="form-control" placeholder="Ingrese la Descripción" />
                     <ValidationMessage For="@(() => Meta.Descripcion)" />
+
+                    @if (descripcionExistente)
+                    {
+                        <p class="text-danger">La descripción ya existe. Por favor, elija otra.</p>
+                    }
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -59,6 +64,7 @@
 
     [Parameter]
     public int MetaId { get; set; }
+    private bool descripcionExistente = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,11 +86,27 @@
 
     public async Task Guardar()
     {
-      var guardo = await metasService.Guardar(Meta);
-      if (guardo)
-      {
-         NavigationManager.NavigateTo("/MetasIndex");
-      }
+        if (VerificarExistenciaDescripcion())
+        {
+            descripcionExistente = true;
+            return;
+        }
+
+        descripcionExistente = false;
+        var guardo = await metasService.Guardar(Meta);
+        if (guardo)
+        {
+            NavigationManager.NavigateTo("/MetasIndex");
+        }
     }
+
+    public bool VerificarExistenciaDescripcion()
+    {
+        var metasConDescripcion = metasService.Listar(m => m.Descripcion.ToLower() == Meta.Descripcion.ToLower() 
+        && m.MetaId != Meta.MetaId).Result;
+
+        return metasConDescripcion.Any();
+    }
+
 
 }
