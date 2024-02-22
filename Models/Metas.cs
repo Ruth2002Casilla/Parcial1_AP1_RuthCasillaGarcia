@@ -11,9 +11,10 @@ namespace Parcial1_AP1_RuthCasillaGarcia.Models
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }
 
-        [Required(ErrorMessage ="Este campo es Obligatorio")]
-        [RegularExpression(@"^[A-Z][a-zA-Z]*$", ErrorMessage = "La Descripcion debe comenzar con una letra mayuscula y no debe contener numeros.")]
+        [Required(ErrorMessage = "Este campo es Obligatorio")]
+        [RegularExpression(@"^[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑ ]*$", ErrorMessage = "La Descripción debe comenzar con una letra mayúscula y no debe contener números.")]
         public string? Descripcion { get; set; }
+
 
 
         [Required(ErrorMessage = "Este campo es Obligatorio")]
