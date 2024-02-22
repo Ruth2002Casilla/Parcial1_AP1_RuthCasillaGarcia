@@ -26,8 +26,9 @@
 
             <div class="col-md-6 mb-3 mx-auto">
                 <label style="font-weight: bold;" class="form-label font-weight-bold">Monto:</label>
-                <span>@Meta.Monto</span>
+                <span>@string.Format("{0:N2}", Meta.Monto)</span>
             </div>
+
 
             <div class="col-md-12 mb-3 mx-auto">
                 <p style="font-weight: bold;">¿Seguro que deseas eliminar esta Meta?</p>
