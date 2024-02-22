@@ -92,7 +92,7 @@
             {
                 ListaMetas = await metasService.Listar(m => m.MetaId == MetaId);
             }
-            else if (filtro == "monto" && decimal.TryParse(valorFiltro, out decimal Monto))
+            else if (filtro == "monto" && float.TryParse(valorFiltro, out float Monto))
             {
                 ListaMetas = await metasService.Listar(m => m.Monto == Monto);
             }

@@ -17,8 +17,8 @@ namespace Parcial1_AP1_RuthCasillaGarcia.Models
 
 
         [Required(ErrorMessage = "Este campo es Obligatorio")]
-        [Range(0, double.MaxValue, ErrorMessage = "Monto no puede ser un número negativo.")]
-        public decimal Monto { get; set; }
+        [Range(1, double.MaxValue, ErrorMessage = "Monto no puede ser un número negativo o Cero.")]
+        public float Monto { get; set; }
 
         public Metas()
         {
