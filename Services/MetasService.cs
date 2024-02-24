@@ -13,37 +13,37 @@ namespace Parcial1_AP1_RuthCasillaGarcia.Services
             _context = context;
         }
 
-        public async Task<bool> Verificar(int MetaId)
+        public async Task<bool> Verificar(int metaId)
         {
-            return await _context.Metas.AnyAsync(m => m.MetaId == MetaId);
+            return await _context.Metas.AnyAsync(m => m.MetaId == metaId);
         }
-        public async Task<bool> Modificar(Metas Meta)
+        public async Task<bool> Modificar(Metas meta)
         {
-            _context.Update(Meta);
+            _context.Update(meta);
             return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> Agregar(Metas Meta)
+        public async Task<bool> Agregar(Metas meta)
         {
-            _context.Metas.Add(Meta);
+            _context.Metas.Add(meta);
             return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> Eliminar(Metas Meta)
+        public async Task<bool> Eliminar(Metas meta)
         {
-            _context.Metas.Remove(Meta);
+            _context.Metas.Remove(meta);
             return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> Guardar(Metas Meta)
+        public async Task<bool> Guardar(Metas meta)
         {
-            if (!await Verificar(Meta.MetaId))
-                return await Agregar(Meta);
+            if (!await Verificar(meta.MetaId))
+                return await Agregar(meta);
             else
-                return await Modificar(Meta);
+                return await Modificar(meta);
         }
-        public async Task<Metas?> Buscar(int MetaId)
+        public async Task<Metas?> Buscar(int metaId)
         {
             return await _context.Metas
                    .AsNoTracking()
-                   .FirstOrDefaultAsync(m => m.MetaId == MetaId);
+                   .FirstOrDefaultAsync(m => m.MetaId == metaId);
         }
         public async Task<List<Metas>> Listar(Expression<Func<Metas, bool>> criterio)
         {
