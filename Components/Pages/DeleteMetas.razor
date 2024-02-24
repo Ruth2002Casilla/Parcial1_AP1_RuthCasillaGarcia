@@ -5,47 +5,58 @@
 @rendermode InteractiveServer
 
 <EditForm Model="Meta">
-   <DataAnnotationsValidator />
+    <DataAnnotationsValidator />
 
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white text-center py-2 rounded">
             <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Eliminar Metas</h3>
         </div>
 
-        <div class="card-body text-center">
-            <div class="col-md-6 mb-3 mx-auto">
-                <label style="font-weight: bold;" class="form-label font-weight-bold">Fecha:</label>
-                <span>@Meta.Fecha</span>
+        <div class="card-body d-flex align-items-center justify-content-center">
+            <div class="text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight: bold;" class="form-label font-weight-bold">Fecha:</label>
+                        <span>@Meta.Fecha.ToShortDateString()</span>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight: bold; display: inline-block;" class="form-label font-weight-bold">Descripción:</label>
+                        <span style="display: inline-block;">@Meta.Descripcion</span>
+                    </div>
+                </div>
+
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight: bold;" class="form-label font-weight-bold">Monto:</label>
+                        <span>@string.Format("{0:N2}", Meta.Monto)</span>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-12 mb-3">
+                        <p style="font-weight: bold;">¿Seguro que deseas eliminar esta Meta?</p>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-12 mb-3">
+                        <div class="d-flex justify-content-center">
+                            <button @onclick="Eliminar" type="button" class="btn btn-success"><span class="fas fa-check"></span> Sí</button>
+                            <a href="/MetasIndex/" class="btn btn-danger ml-2"><span class="fas fa-times"></span> No</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-md-6 mb-3 mx-auto">
-                <label style="font-weight: bold;" class="form-label font-weight-bold">Descripci&oacuten:</label>
-                <span>@Meta.Descripcion</span>
-            </div>
-
-
-            <div class="col-md-6 mb-3 mx-auto">
-                <label style="font-weight: bold;" class="form-label font-weight-bold">Monto:</label>
-                <span>@string.Format("{0:N2}", Meta.Monto)</span>
-            </div>
-
-
-            <div class="col-md-12 mb-3 mx-auto">
-                <p style="font-weight: bold;">¿Seguro que deseas eliminar esta Meta?</p>
-            </div>
-
         </div>
-
-        <div class="card-footer bg-light d-flex justify-content-center">
-            <div class="btn-group">
-                <button @onclick="Eliminar" type="button" class="btn btn-success btn-block"><span class="fas fa-check"></span> Sí</button>
-                <a href="/MetasIndex/" class="btn btn-danger btn-block"><span class="fas fa-times"></span> No</a>
-            </div>
-        </div>
-
     </div>
-
 </EditForm>
+
+
+
 
 @code {
 
